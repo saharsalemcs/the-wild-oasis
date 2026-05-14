@@ -18,5 +18,6 @@ module.exports = {
     ],
     "react/jsx-key": "warn",
     "no-unused-vars": "warn",
+    "react/prop-types": "off",
   },
 };
