@@ -23,6 +23,7 @@ async function deleteGuests() {
 async function deleteCabins() {
   const { error } = await supabase.from("cabins").delete().gt("id", 0);
   if (error) console.log(error.message);
+  console.log(error);
 }
 
 async function deleteBookings() {
