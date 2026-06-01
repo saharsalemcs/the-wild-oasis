@@ -89,7 +89,6 @@ function Toggle({ id }) {
     // getBoundingClientRect() => return the size and position of the element
     // هاتلي مكان وحجم أقرب button اتضغط عليه
     const rect = e.target.closest("button").getBoundingClientRect();
-    console.log(rect);
     setPosition({
       x: window.innerWidth - rect.width - rect.x,
       y: rect.y + rect.height + 8,
