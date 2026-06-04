@@ -14,7 +14,7 @@ const FullPage = styled.div`
 
 function ProtectedRoute({ children }) {
   // 1. Load the authenticated user
-  const { user, isLoading, isAuthenticated } = useUser();
+  const { isLoading, isAuthenticated } = useUser();
   const navigate = useNavigate();
 
   // 3. if there is NO authenticated user, redirect to /login
