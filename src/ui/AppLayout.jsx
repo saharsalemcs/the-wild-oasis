@@ -14,6 +14,14 @@ const Main = styled.main`
   background-color: var(--color-grey-50);
   padding: 4rem 4.8rem 6.4rem;
   overflow: scroll;
+  overflow-x: hidden;
+
+  /* Removing scrollbars for webkit, firefox, and ms, respectively */
+  &::-webkit-scrollbar {
+    width: 0 !important;
+  }
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 `;
 
 const Container = styled.div`

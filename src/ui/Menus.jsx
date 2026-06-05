@@ -86,6 +86,7 @@ function Toggle({ id }) {
   const { openId, open, close, setPosition } = useContext(MenusContext);
 
   function handleClick(e) {
+    e.stopPropagation();
     // getBoundingClientRect() => return the size and position of the element
     // هاتلي مكان وحجم أقرب button اتضغط عليه
     const rect = e.target.closest("button").getBoundingClientRect();
@@ -106,7 +107,7 @@ function Toggle({ id }) {
 
 function List({ id, children }) {
   const { openId, position, close } = useContext(MenusContext);
-  const ref = useOutsideClick(close);
+  const ref = useOutsideClick(close, false);
 
   if (openId !== id) return null;
 
