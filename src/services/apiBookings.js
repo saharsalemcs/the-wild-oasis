@@ -141,9 +141,18 @@ export async function deleteBooking(id) {
   // REMEMBER RLS POLICIES
   const { data, error } = await supabase.from("bookings").delete().eq("id", id);
 
-  if (error) {
-    console.error(error);
-    throw new Error("Booking could not be deleted");
-  }
+  if (error) throw new Error("Booking could not be deleted");
+
+  return data;
+}
+
+export async function createBooking(newBooking) {
+  const { data, error } = await supabase
+    .from("bookings")
+    .insert([{ ...newBooking }])
+    .select();
+
+  if (error) throw new Error("Booking could not be added");
+
   return data;
 }
