@@ -146,7 +146,35 @@ export async function deleteBooking(id) {
   return data;
 }
 
+// Check Cabin Availability
+export async function checkForOverlappingBookings(cabinId, startDate, endDate) {
+  let query = supabase
+    .from("bookings")
+    .select("id")
+    .not("status", "eq", "checked-out")
+    .eq("cabinId", cabinId)
+    .lte("startDate", endDate)
+    .gte("endDate", startDate);
+
+  const { data, error } = await query;
+
+  if (error) throw new Error("Failed to check for overlapping bookings");
+
+  return data.length > 0; // كدا فيه حجوزات موجودة بالفعل
+}
+
 export async function createBooking(newBooking) {
+  // Check Cabin Availability
+  const { cabinId, startDate, endDate } = newBooking;
+  const hasOverlapping = await checkForOverlappingBookings(
+    cabinId,
+    startDate,
+    endDate,
+  );
+
+  if (hasOverlapping)
+    throw new Error("This cabin is already booked for these days");
+
   const { data, error } = await supabase
     .from("bookings")
     .insert([{ ...newBooking }])
