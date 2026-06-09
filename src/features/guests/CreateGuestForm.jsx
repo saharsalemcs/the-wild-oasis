@@ -2,10 +2,10 @@ import { useForm } from "react-hook-form";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
-import useCreateGuest from "./useCreateGuest";
+import { useCreateGuest } from "./useCreateGuest";
 import Button from "../../ui/Button";
 
-function CreateGuestForm({ onSuccess, onCancel }) {
+function CreateGuestForm({ onSuccess, onCloseModal }) {
   const { createGuest, isLoading: isCreating } = useCreateGuest();
 
   const {
@@ -20,12 +20,16 @@ function CreateGuestForm({ onSuccess, onCancel }) {
       onSuccess: (newGuest) => {
         reset();
         onSuccess?.(newGuest); // بترجع الـ guest الجديد للـ BookingForm
+        onCloseModal?.();
       },
     });
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit)}
+      type={onCloseModal ? "modal" : "regular"}
+    >
       <FormRow label="Full Name" error={errors?.fullName?.message}>
         <Input
           type="text"
@@ -86,7 +90,7 @@ function CreateGuestForm({ onSuccess, onCancel }) {
           variation="secondary"
           type="button"
           disabled={isCreating}
-          onClick={onCancel}
+          onClick={() => onCloseModal?.()}
         >
           Cancel
         </Button>

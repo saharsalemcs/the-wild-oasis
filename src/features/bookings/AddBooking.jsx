@@ -5,7 +5,7 @@ function AddBooking() {
   return (
     <div>
       <NavLink to="/booking/new">
-        <Button>Add New Booking</Button>
+        <Button>+ New Booking</Button>
       </NavLink>
     </div>
   );

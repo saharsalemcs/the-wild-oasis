@@ -28,3 +28,25 @@ export const formatCurrency = (value) =>
   new Intl.NumberFormat("en", { style: "currency", currency: "USD" }).format(
     value,
   );
+
+export function formatCabinOptions(cabins) {
+  return [
+    { value: "", label: "Select a cabin..." },
+    ...(cabins?.map((cabin) => ({
+      value: cabin.id,
+      label: `${cabin.name} — $${cabin.regularPrice}/night${
+        cabin.discount ? ` (-$${cabin.discount})` : ""
+      }`,
+    })) ?? []),
+  ];
+}
+
+export function formatGuestOptions(guests) {
+  return [
+    { value: "", label: "Select a guest..." },
+    ...(guests?.map((guest) => ({
+      value: guest.id,
+      label: `${guest.fullName} — ${guest.email}`,
+    })) ?? []),
+  ];
+}
