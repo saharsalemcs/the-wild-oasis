@@ -181,7 +181,24 @@ function CreateBookingForm() {
         </FormRow>
 
         {/* ─── Has Breakfast ─── */}
-        <FormRow></FormRow>
+        <FormRow label="Breakfast included?">
+          <input
+            type="checkbox"
+            id="hasBreakfast"
+            disabled={isLoading}
+            {...register("hasBreakfast")}
+          />
+        </FormRow>
+
+        {/* ─── Is Paid ─── */}
+        <FormRow label="Paid?">
+          <input
+            type="checkbox"
+            id="isPaid"
+            disabled={isLoading}
+            {...register("isPaid")}
+          />
+        </FormRow>
       </Form>
     </>
   );
