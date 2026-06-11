@@ -8,6 +8,11 @@ const Textarea = styled.textarea`
   box-shadow: var(--shadow-sm);
   width: 100%;
   height: 8rem;
+
+  &::placeholder {
+    color: var(--color-grey-300);
+    font-size: 1.5rem;
+  }
 `;
 
 export default Textarea;

@@ -18,6 +18,9 @@ import Modal from "../../ui/Modal";
 import CreateGuestForm from "../guests/CreateGuestForm";
 import styled from "styled-components";
 import Input from "../../ui/Input";
+import Checkbox from "../../ui/Checkbox";
+import Textarea from "../../ui/Textarea";
+import { useNavigate } from "react-router-dom";
 
 const StyledFormRow = styled.div`
   display: grid;
@@ -34,11 +37,39 @@ const GuestSelectWrapper = styled.div`
   align-items: center;
 `;
 
+const PriceSummary = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.2rem 1.6rem;
+  background-color: var(--color-grey-50);
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--color-grey-200);
+  font-size: 1.4rem;
+`;
+
+const PriceRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-grey-600);
+`;
+
+const PriceTotal = styled.div`
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  color: var(--color-grey-800);
+  padding-top: 0.8rem;
+  margin-top: 0.4rem;
+  border-top: 1px solid var(--color-grey-200);
+`;
+
 function CreateBookingForm() {
   const { createBooking, isLoading: isCreating } = useCreateBooking();
   const { cabins, isLoading: isLoadingCabins } = useCabins();
   const { guests, isLoading: isLoadingGuests } = useGuests();
   const { settings: { breakfastPrice } = {} } = useSettings();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -86,7 +117,31 @@ function CreateBookingForm() {
 
   const moveBack = useMoveBack();
 
-  function onSubmit(data) {}
+  function onSubmit(data) {
+    if (numNights <= 0) return;
+
+    const bookingData = {
+      ...data,
+      cabinId: Number(data.cabinId),
+      guestId: Number(data.guestId),
+      numGuests: Number(data.numGuests),
+      numNights,
+      cabinPrice,
+      extrasPrice,
+      totalPrice,
+      hasBreakfast: Boolean(data.hasBreakfast),
+      isPaid: Boolean(data.isPaid),
+      status: data.status || "unconfirmed",
+      created_at: new Date().toISOString(),
+    };
+
+    createBooking(bookingData, {
+      onSuccess: () => {
+        reset();
+        navigate("/bookings");
+      },
+    });
+  }
 
   return (
     <>
@@ -182,22 +237,83 @@ function CreateBookingForm() {
 
         {/* ─── Has Breakfast ─── */}
         <FormRow label="Breakfast included?">
-          <input
-            type="checkbox"
+          <Checkbox
             id="hasBreakfast"
             disabled={isLoading}
-            {...register("hasBreakfast")}
+            checked={watch("hasBreakfast")}
+            onChange={(e) => setValue("hasBreakfast", e.target.checked)}
+          >
+            Add breakfast (${breakfastPrice}/person/night)
+          </Checkbox>
+        </FormRow>
+
+        <FormRow label="Payment status">
+          <Checkbox
+            id="isPaid"
+            disabled={isLoading}
+            checked={watch("isPaid")}
+            onChange={(e) => setValue("isPaid", e.target.checked)}
+          >
+            Paid in full
+          </Checkbox>
+        </FormRow>
+
+        <FormRow label="Status" error={errors?.status?.message}>
+          <Select
+            id="status"
+            disabled={isLoading}
+            value={watch("status") || "unconfirmed"}
+            onChange={(e) =>
+              setValue("status", e.target.value, { shouldValidate: true })
+            }
+            options={[
+              { value: "unconfirmed", label: "Unconfirmed" },
+              { value: "confirmed", label: "Confirmed" },
+            ]}
           />
         </FormRow>
 
-        {/* ─── Is Paid ─── */}
-        <FormRow label="Paid?">
-          <input
-            type="checkbox"
-            id="isPaid"
+        <FormRow label="Observation">
+          <Textarea
+            id="observation"
             disabled={isLoading}
-            {...register("isPaid")}
+            placeholder="Any special requests or notes..."
+            {...register("observation")}
           />
+        </FormRow>
+
+        {/* Price Summary */}
+        {selectedCabin && numNights > 0 && (
+          <FormRow label="Price summary">
+            <PriceSummary>
+              <PriceRow>
+                <span>Cabin ({numNights} nights)</span>
+                <span>${cabinPrice}</span>
+              </PriceRow>
+
+              {hasBreakfast && (
+                <PriceRow>
+                  <span>
+                    Breakfast ({numGuests} guests × {numNights} nights)
+                  </span>
+                  <span>${extrasPrice}</span>
+                </PriceRow>
+              )}
+
+              <PriceTotal>
+                <span>Total</span>
+                <span>${totalPrice}</span>
+              </PriceTotal>
+            </PriceSummary>
+          </FormRow>
+        )}
+
+        {/* Actions */}
+        <FormRow>
+          <Button variation="secondary" type="reset" onClick={() => reset()}>
+            Cancel
+          </Button>
+          <Button disabled={isLoading || numNights <= 0}>Create Booking</Button>
         </FormRow>
       </Form>
     </>
