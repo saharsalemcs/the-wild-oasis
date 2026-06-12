@@ -122,10 +122,10 @@ OR
   return data;
 }
 
-export async function updateBooking(id, obj) {
+export async function updateBooking(newBookingData, id) {
   const { data, error } = await supabase
     .from("bookings")
-    .update(obj)
+    .update(newBookingData)
     .eq("id", id)
     .select()
     .single();
@@ -180,7 +180,10 @@ export async function createBooking(newBooking) {
     .insert([{ ...newBooking }])
     .select();
 
-  if (error) throw new Error("Booking could not be added");
+  if (error) {
+    console.log("Supabase error details:", error);
+    throw new Error("Booking could not be added");
+  }
 
   return data;
 }
