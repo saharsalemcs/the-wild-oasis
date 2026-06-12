@@ -1,9 +1,4 @@
-import ButtonText from "../../ui/ButtonText";
-import Row from "../../ui/Row";
-import Heading from "../../ui/Heading";
-import Select from "../../ui/Select";
 import { useCreateBooking } from "./useCreateBooking";
-import { HiOutlineSquare3Stack3D } from "react-icons/hi2";
 import { useForm } from "react-hook-form";
 import { useCabins } from "../cabins/useCabins";
 import { useGuests } from "../guests/useGuests";
@@ -11,14 +6,8 @@ import { differenceInDays, parseISO } from "date-fns";
 import { useSettings } from "../settings/useSettings";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
-import { formatCabinOptions, formatGuestOptions } from "../../utils/helpers";
 import Button from "../../ui/Button";
-import Modal from "../../ui/Modal";
-import CreateGuestForm from "../guests/CreateGuestForm";
-import styled from "styled-components";
-import Input from "../../ui/Input";
-import Checkbox from "../../ui/Checkbox";
-import Textarea from "../../ui/Textarea";
+
 import { useNavigate } from "react-router-dom";
 import BookingFormFields from "./BookingFormFields";
 
@@ -32,7 +21,6 @@ function CreateBookingForm() {
   const {
     register,
     handleSubmit,
-    getValues,
     reset,
     setValue,
     watch,
@@ -73,6 +61,8 @@ function CreateBookingForm() {
       totalPrice: cabinPrice + extrasPrice,
       hasBreakfast: Boolean(data.hasBreakfast),
       isPaid: Boolean(data.isPaid),
+      startDate,
+      endDate,
       status: data.status || "unconfirmed",
       created_at: new Date().toISOString(),
     };
