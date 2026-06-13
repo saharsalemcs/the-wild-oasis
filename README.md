@@ -1,3 +1,3 @@
 # The Wild Oasis
 
-First full stack project with react & supabase.
+Main project in React Course. Built with React Query and Supbase.
