@@ -87,7 +87,14 @@ function CreateBookingForm() {
         isLoading={isLoading}
       />
       <FormRow>
-        <Button variation="secondary" type="reset" onClick={() => reset()}>
+        <Button
+          variation="secondary"
+          type="reset"
+          onClick={() => {
+            reset();
+            navigate(-1);
+          }}
+        >
           Cancel
         </Button>
         <Button disabled={isLoading}>Create Booking</Button>
