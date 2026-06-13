@@ -12,12 +12,13 @@ import { useMoveBack } from "../../hooks/useMoveBack";
 import { useBooking } from "./useBooking";
 import Spinner from "../../ui/Spinner";
 import { useNavigate } from "react-router-dom";
-import { HiArrowUpOnSquare, HiTrash } from "react-icons/hi2";
+import { HiArrowUpOnSquare, HiPencil, HiTrash } from "react-icons/hi2";
 import { useCheckout } from "../check-in-out/useCheckout";
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import { useDeleteBooking } from "./useDeleteBooking";
 import Empty from "../../ui/Empty";
+import EditBookingForm from "./EditBookingForm";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -76,6 +77,10 @@ function BookingDetail() {
         )}
 
         <Modal>
+          <Modal.Open opens="edit">
+            <Button icon={<HiPencil />}>Edit booking</Button>
+          </Modal.Open>
+
           <Modal.Open opens="delete">
             <Button variation="danger" icon={<HiTrash />}>
               Delete booking
@@ -90,6 +95,10 @@ function BookingDetail() {
               }
               disabled={isDeleting}
             />
+          </Modal.Window>
+
+          <Modal.Window name="edit">
+            <EditBookingForm bookingToEdit={booking} />
           </Modal.Window>
         </Modal>
 

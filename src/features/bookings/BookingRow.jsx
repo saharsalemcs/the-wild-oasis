@@ -11,6 +11,7 @@ import {
   HiArrowDownOnSquare,
   HiArrowUpOnSquare,
   HiEye,
+  HiPencil,
   HiTrash,
 } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +19,7 @@ import { useCheckout } from "../check-in-out/useCheckout";
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import { useDeleteBooking } from "./useDeleteBooking";
+import EditBookingForm from "./EditBookingForm";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -49,15 +51,17 @@ const Amount = styled.div`
 function BookingRow({
   booking: {
     id: bookingId,
-    created_at,
     startDate,
     endDate,
     numNights,
     numGuests,
     totalPrice,
+    hasBreakfast,
+    isPaid,
+    observations,
     status,
-    guests: { fullName: guestName, email },
-    cabins: { name: cabinName },
+    guests: { fullName: guestName, email, id: guestId },
+    cabins: { name: cabinName, id: cabinId },
   },
 }) {
   const statusToTagName = {
@@ -129,6 +133,10 @@ function BookingRow({
             <Modal.Open opens="delete">
               <Menus.Button icon={<HiTrash />}>Delete booking</Menus.Button>
             </Modal.Open>
+
+            <Modal.Open opens="edit">
+              <Menus.Button icon={<HiPencil />}>Edit booking</Menus.Button>
+            </Modal.Open>
           </Menus.List>
         </Menus.Menu>
 
@@ -137,6 +145,25 @@ function BookingRow({
             resourceName="bookings"
             onConfirm={() => deleteBooking(bookingId)}
             disabled={isDeleting}
+          />
+        </Modal.Window>
+
+        <Modal.Window name="edit">
+          <EditBookingForm
+            bookingToEdit={{
+              id: bookingId,
+              cabinId,
+              guestId,
+              startDate,
+              endDate,
+              numNights,
+              numGuests,
+              totalPrice,
+              status,
+              hasBreakfast,
+              isPaid,
+              observations,
+            }}
           />
         </Modal.Window>
       </Modal>

@@ -185,7 +185,7 @@ function BookingFormFields({
       <FormRow label="Breakfast included?">
         <Checkbox
           id="hasBreakfast"
-          checked={watch("hasBreakfast") || false}
+          checked={watch("hasBreakfast") ?? false}
           onChange={(e) => setValue("hasBreakfast", e.target.checked)}
           disabled={isLoading}
         >
@@ -197,7 +197,7 @@ function BookingFormFields({
       <FormRow label="Payment status">
         <Checkbox
           id="isPaid"
-          checked={watch("isPaid") || false}
+          checked={watch("isPaid") ?? false}
           onChange={(e) => setValue("isPaid", e.target.checked)}
           disabled={isLoading}
         >
